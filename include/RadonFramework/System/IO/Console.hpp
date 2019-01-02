@@ -31,8 +31,8 @@ using SetForgroundColorCallback = void (*)(RF_Type::UInt8,
 extern SetForgroundColorCallback SetForgroundColor;
 
 using SetBackgroundColorCallback = void (*)(RF_Type::UInt8,
-                                           RF_Type::UInt8,
-                                           RF_Type::UInt8);
+                                            RF_Type::UInt8,
+                                            RF_Type::UInt8);
 extern SetBackgroundColorCallback SetBackgroundColor;
 
 using ResetForgroundColorCallback = void (*)();

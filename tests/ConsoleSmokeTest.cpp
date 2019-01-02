@@ -1,6 +1,7 @@
 #include <RadonFramework/Radon.hpp>
 #include <RadonFramework/IO/Console.hpp>
 #include <RadonFramework/IO/StringStyle.hpp>
+#include <RadonFramework/IO/LogConsole.hpp>
 
 using Style = RF_IO::StringStyle;
 
@@ -63,7 +64,13 @@ int main(int argc, char** argv)
   console.Log(Style().Red(pwd + "\n"_rfs));
   auto age = console.Question(Style().Reset().Text("Age: "_rfs));
   console.Log(Style().Gradient({{255, 0, 0, 0.0f}, {0, 0, 255, 1.0f}},
-                               "This is a test gradient"_rfs));
+                               "This is a test gradient\n"_rfs));
+  
+  RF_IO::Log::AddAppender(RF_Mem::AutoPointer<RF_Diag::Appender>(new RF_IO::LogConsole()));
+  RF_IO::LogInfo("info");
+  RF_IO::LogDebug("debug");
+  RF_IO::LogError("error");
+  RF_IO::LogFatalError("fatal error");
 
   RF_Thread::ThreadPool::Global().DisableAndWaitTillDone();
   return 0;

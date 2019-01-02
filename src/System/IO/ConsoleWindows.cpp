@@ -5,6 +5,7 @@
 #include "RadonFramework/Core/Types/String.hpp"
 #include "RadonFramework/System/IO/Console.hpp"
 #include "RadonFramework/System/Environment.hpp"
+#include "RadonFramework/System/Security.hpp"
 
 void Clear_Windows()
 {
@@ -19,7 +20,7 @@ RF_Type::String ReadLine_Windows()
   HANDLE ih = GetStdHandle(STD_INPUT_HANDLE);
   GetConsoleMode(ih, &mode);
   SetConsoleMode(ih, mode | ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT |
-                             ENABLE_ECHO_INPUT);
+                         ENABLE_ECHO_INPUT);
   while(ReadConsoleA(ih, c, 1024, &count, NULL) && count == 1024)
   {
     result += RF_Type::String(c, count);
@@ -40,21 +41,21 @@ RF_Type::String
   {
     RF_Type::String secret;
     char c[1024];
-    SetConsoleMode(ih, (mode | ENABLE_LINE_INPUT) & ~ENABLE_ECHO_INPUT );
+    SetConsoleMode(ih, (mode | ENABLE_LINE_INPUT) & ~ENABLE_ECHO_INPUT);
     while(ReadConsoleA(ih, c, 1024, &count, NULL))
     {
-      if (count != 1024)
-      {// remove \r\n
+      if(count != 1024)
+      {  // remove \r\n
         count -= 2;
       }
       auto newPart = RF_Type::String(c, count);
       secret += newPart;
-      // clear console buffer
-      RF_SysMem::Set(c, 0, 1024);
-      // overwrite buffer with 0 before memory release
-      RF_SysMem::Set(const_cast<void*>(reinterpret_cast<const void*>(newPart.ByteData())), 0, newPart.Size());
+      RF_SysSecurity::EnsureFillZeros(reinterpret_cast<RF_Type::UInt8*>(c),
+                                      1024);
+      RF_SysSecurity::EnsureFillZeros(
+          const_cast<RF_Type::UInt8*>(newPart.ByteData()), newPart.Size());
       newPart.Clear();
-      if (count < 1024)
+      if(count < 1024)
       {
         count = 0;
         break;
@@ -62,8 +63,8 @@ RF_Type::String
     }
     SetConsoleMode(ih, mode);
     result = Callback(secret);
-    // overwrite buffer with 0 before memory release
-    RF_SysMem::Set(const_cast<void*>(reinterpret_cast<const void*>(secret.ByteData())), 0, secret.Size());
+    RF_SysSecurity::EnsureFillZeros(
+        const_cast<RF_Type::UInt8*>(secret.ByteData()), secret.Size());
     secret.Clear();
   }
   return result;
