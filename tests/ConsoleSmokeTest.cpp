@@ -10,6 +10,17 @@ int main(int argc, char** argv)
   RadonFramework::Radon framework;
 
   RadonFramework::IO::Console console;
+  auto size = console.GetScreenSize();
+  RF_Type::String line;
+  for (auto i = 0; i < size.First; ++i)
+  {
+    line += " "_rfs;
+  }
+  for (auto i = 0; i < size.Second; ++i)
+  {
+    console.Log(Style().RGB({0, (255.f / size.Second) * i, 0}, false).Text(line).Reset());
+  }
+  console.Question(Style().Reset().Text("Continue ?"_rfs));
   console.Clear();
   console.Log(Style().Green("Radon Framework\n"_rfs));
   console.Log(Style()
@@ -62,7 +73,6 @@ int main(int argc, char** argv)
         return result;
       });
   console.Log(Style().Red(pwd + "\n"_rfs));
-  auto age = console.Question(Style().Reset().Text("Age: "_rfs));
   console.Log(Style().Gradient({{255, 0, 0, 0.0f}, {0, 0, 255, 1.0f}},
                                "This is a test gradient\n"_rfs));
   

@@ -216,6 +216,19 @@ RF_SysConsole::ColorLevel GetColorLevelSupport_Windows()
   return result;
 }
 
+RF_Collect::Pair<RF_Type::UInt16, RF_Type::UInt16> GetScreenSize_Windows()
+{
+  RF_Collect::Pair<RF_Type::UInt16, RF_Type::UInt16> result;
+  CONSOLE_SCREEN_BUFFER_INFO csbi; 
+  HANDLE oh = GetStdHandle(STD_OUTPUT_HANDLE);
+  if (GetConsoleScreenBufferInfo(oh, &csbi))
+  {
+    result.First = csbi.srWindow.Right-csbi.srWindow.Left+1;
+    result.Second = csbi.srWindow.Bottom-csbi.srWindow.Top+1;
+  }
+  return result;
+}
+
 namespace RadonFramework::System::IO::Console
 {
 void Init()
@@ -248,6 +261,7 @@ void Dispatch()
   ResetBackgroundColor = ::ResetBackgroundColor_Windows;
   ResetModifier = ::ResetModifier_Windows;
   GetColorLevelSupport = ::GetColorLevelSupport_Windows;
+  GetScreenSize = ::GetScreenSize_Windows;
 }
 
 }  // namespace RadonFramework::System::IO::Console

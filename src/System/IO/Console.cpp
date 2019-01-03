@@ -124,6 +124,17 @@ ColorLevel GetColorLevelSupport_SystemAPIDispatcher()
   return GetColorLevelSupport();
 }
 
+RF_Collect::Pair<RF_Type::UInt16, RF_Type::UInt16>
+GetScreenSize_SystemAPIDispatcher()
+{
+  GetScreenSize = nullptr;
+  Dispatch();
+  RF_ASSERT(GetScreenSize != GetScreenSize_SystemAPIDispatcher &&
+                GetScreenSize != nullptr,
+            "Funtion was called and couldn't be dispatched");
+  return GetScreenSize();
+}
+
 ClearCallback Clear = Clear_SystemAPIDispatcher;
 ReadLineCallback ReadLine = ReadLine_SystemAPIDispatcher;
 ReadSecretLineCallback ReadSecretLine = ReadSecretLine_SystemAPIDispatcher;
@@ -141,6 +152,7 @@ ResetBackgroundColorCallback ResetBackgroundColor =
 ResetModifierCallback ResetModifier = ResetModifier_SystemAPIDispatcher;
 GetColorLevelSupportCallback GetColorLevelSupport =
     GetColorLevelSupport_SystemAPIDispatcher;
+GetScreenSizeCallback GetScreenSize = GetScreenSize_SystemAPIDispatcher;
 
 RF_Type::Bool IsSuccessfullyDispatched()
 {
@@ -172,6 +184,8 @@ RF_Type::Bool IsSuccessfullyDispatched()
   result = result &&
            GetColorLevelSupport != GetColorLevelSupport_SystemAPIDispatcher &&
            GetColorLevelSupport != nullptr;
+  result = result && GetScreenSize != GetScreenSize_SystemAPIDispatcher &&
+           GetScreenSize != nullptr;
   return result;
 }
 
@@ -208,6 +222,9 @@ void GetNotDispatchedFunctions(RF_Collect::List<RF_Type::String>& Result)
   if(GetColorLevelSupport == GetColorLevelSupport_SystemAPIDispatcher ||
      GetColorLevelSupport == nullptr)
     Result.AddLast("GetColorLevelSupport"_rfs);
+  if(GetScreenSize == GetScreenSize_SystemAPIDispatcher ||
+     GetScreenSize == nullptr)
+    Result.AddLast("GetScreenSize"_rfs);
 }
 
 }  // namespace RadonFramework::System::IO::Console

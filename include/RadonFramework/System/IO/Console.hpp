@@ -1,7 +1,9 @@
 #pragma once
 
 #include <RadonFramework/Core/Types/String.hpp>
+#include <RadonFramework/Core/Types/UInt16.hpp>
 #include <RadonFramework/Collections/List.hpp>
+#include <RadonFramework/Collections/Pair.hpp>
 
 namespace RadonFramework::System::IO::Console
 {
@@ -40,6 +42,10 @@ extern ResetForgroundColorCallback ResetForgroundColor;
 
 using ResetBackgroundColorCallback = void (*)();
 extern ResetBackgroundColorCallback ResetBackgroundColor;
+
+using GetScreenSizeCallback =
+    RF_Collect::Pair<RF_Type::UInt16, RF_Type::UInt16> (*)();
+extern GetScreenSizeCallback GetScreenSize;
 
 enum class Modifiers
 {

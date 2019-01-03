@@ -6,7 +6,7 @@ namespace RadonFramework::IO
 {
 void Console::Clear()
 {
-  RadonFramework::System::IO::Console::Clear();
+  RF_SysConsole::Clear();
 }
 
 void Console::Group(const StringStyle& Label) {}
@@ -15,9 +15,13 @@ void Console::GroupCollapsed() {}
 
 void Console::EndGroup(const StringStyle& Label) {}
 
-void Console::Log(char* Text, ...) {}
+void Console::Log(const RF_Type::String& Text)
+{
+  RF_SysConsole::Write(Text);
+}
 
-void Console::Log(const StringStyle& Text, ...) {
+void Console::Log(const StringStyle& Text)
+{
   Text.ToString();
 }
 
@@ -26,19 +30,26 @@ void Console::Table() {}
 RF_Type::String Console::Question(const StringStyle& Text)
 {
   Log(Text);
-  return RadonFramework::System::IO::Console::ReadLine();
+  return RF_SysConsole::ReadLine();
 }
 
-RF_Type::String Console::SecretQuestion(const StringStyle& Text, 
-  RF_Type::String (*Callback)(const RF_Type::String&))
+RF_Type::String
+Console::SecretQuestion(const StringStyle& Text,
+                        RF_Type::String (*Callback)(const RF_Type::String&))
 {
   Log(Text);
-  return RadonFramework::System::IO::Console::ReadSecretLine(Callback);
+  return RF_SysConsole::ReadSecretLine(Callback);
 }
 
 RF_Type::String Console::Prompt()
 {
-  return RadonFramework::System::IO::Console::ReadLine();
+  return RF_SysConsole::ReadLine();
+}
+
+RF_Collect::Pair<RF_Type::UInt16, RF_Type::UInt16>
+Console::GetScreenSize() const
+{
+  return RF_SysConsole::GetScreenSize();
 }
 
 }  // namespace RadonFramework::IO
