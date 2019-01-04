@@ -1,6 +1,6 @@
 #pragma once
 
-#include <RadonFramework/Diagnostics/Appender.hpp>
+#include <RadonFramework/IO/Appender.hpp>
 
 namespace RadonFramework::IO
 {
@@ -11,7 +11,7 @@ namespace RadonFramework::IO
  * RF_IO::Log::AddAppender(console);
  * RF_IO::LogInfo("Hello world!");
  **/
-class LogConsole : public Diagnostics::Appender
+class LogConsole : public Appender
 {
 public:
   void WriteInfo(const RF_Type::String& Text) override;

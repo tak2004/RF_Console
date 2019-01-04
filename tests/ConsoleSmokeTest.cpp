@@ -76,7 +76,7 @@ int main(int argc, char** argv)
   console.Log(Style().Gradient({{255, 0, 0, 0.0f}, {0, 0, 255, 1.0f}},
                                "This is a test gradient\n"_rfs));
   
-  RF_IO::Log::AddAppender(RF_Mem::AutoPointer<RF_Diag::Appender>(new RF_IO::LogConsole()));
+  RF_IO::Log::AddAppender(RF_Mem::AutoPointer<RF_IO::Appender>(new RF_IO::LogConsole()));
   RF_IO::LogInfo("info");
   RF_IO::LogDebug("debug");
   RF_IO::LogError("error");

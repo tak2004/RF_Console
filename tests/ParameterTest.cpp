@@ -15,7 +15,7 @@ int main(int argc, const char** argv)
 {
   RadonFramework::Radon framework;
   RF_IO::Log::AddAppender(
-      RF_Mem::AutoPointer<RF_Diag::Appender>(new RF_IO::LogConsole()));
+      RF_Mem::AutoPointer<RF_IO::Appender>(new RF_IO::LogConsole()));
 
   RF_Mem::AutoPointerArray<RF_IO::OptionRule> rules(
       new RF_IO::OptionRule[ApplicationOptions::MAX], ApplicationOptions::MAX);

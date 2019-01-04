@@ -1,4 +1,4 @@
-#include <RadonFramework/Diagnostics/Debugging/Assert.hpp>
+#include <RadonFramework/Core/Common/Assert.hpp>
 #include "RadonFramework/System/IO/Console.hpp"
 
 namespace RadonFramework::System::IO::Console
