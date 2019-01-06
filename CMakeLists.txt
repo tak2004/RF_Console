@@ -9,8 +9,8 @@ if(NOT CMAKE_PROJECT_NAME OR "${CMAKE_PROJECT_NAME}" MATCHES "^RF_Console$")
 endif()
 
 include("Integrate.cmake")
-rcf_addpackage(radonframework "dev")
-rcf_addpackage(rf_colorspace "dev")
+rcf_addpackage(radonframework)
+rcf_addpackage(rf_colorspace)
 
 rcf_generate(module RF_CONSOLE RadonFrameworkConsole "Framework")
     rcf_add_recursive("src/" "Source")
