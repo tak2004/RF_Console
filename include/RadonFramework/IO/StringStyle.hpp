@@ -1,9 +1,11 @@
 #pragma once
 
 #include <RadonFramework/Core/Types/Bool.hpp>
+#include <RadonFramework/Core/Types/UInt16.hpp>
 #include <RadonFramework/Core/Types/UInt32.hpp>
 #include <RadonFramework/Drawing/Color/Spaces.hpp>
 #include <RadonFramework/Drawing/Color/Gradient.hpp>
+#include <RadonFramework/Collections/Pair.hpp>
 
 namespace RadonFramework::Core::Types
 {
@@ -16,6 +18,8 @@ class StringStyle
 {
 public:
   StringStyle();
+  StringStyle(StringStyle&& Move);
+  ~StringStyle();
 
   StringStyle& RGB(RF_Color::RGB Color, RF_Type::Bool Forground = true);
   StringStyle& Hex(RF_Type::UInt32 RGB, RF_Type::Bool Forground = true);
@@ -74,6 +78,13 @@ public:
                         RF_Type::Bool Forground = true);
 
   void ToString() const;
+
+  StringStyle& SaveCursorPosition();
+  StringStyle& RestoreCursorPosition();
+  StringStyle& MoveCursorUp(RF_Type::UInt16 ByValue);
+  StringStyle& MoveCursorDown(RF_Type::UInt16 ByValue);
+  StringStyle& MoveCursorRight(RF_Type::UInt16 ByValue);
+  StringStyle& LineBreak(RF_Type::UInt16 LineWidth);
 
 protected:
   class StyleCommand;

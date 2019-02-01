@@ -135,6 +135,119 @@ GetScreenSize_SystemAPIDispatcher()
   return GetScreenSize();
 }
 
+RF_Collect::Pair<RF_Type::UInt16, RF_Type::UInt16>
+GetCursorPosition_SystemAPIDispatcher()
+{
+  GetCursorPosition = nullptr;
+  Dispatch();
+  RF_ASSERT(GetCursorPosition != GetCursorPosition_SystemAPIDispatcher &&
+                GetCursorPosition != nullptr,
+            "Funtion was called and couldn't be dispatched");
+  return GetCursorPosition();
+}
+
+void SaveCursorPosition_SystemAPIDispatcher()
+{
+  SaveCursorPosition = nullptr;
+  Dispatch();
+  RF_ASSERT(SaveCursorPosition != SaveCursorPosition_SystemAPIDispatcher &&
+                SaveCursorPosition != nullptr,
+            "Funtion was called and couldn't be dispatched");
+  return SaveCursorPosition();
+}
+
+void RestoreCursorPosition_SystemAPIDispatcher()
+{
+  RestoreCursorPosition = nullptr;
+  Dispatch();
+  RF_ASSERT(
+      RestoreCursorPosition != RestoreCursorPosition_SystemAPIDispatcher &&
+          RestoreCursorPosition != nullptr,
+      "Funtion was called and couldn't be dispatched");
+  return RestoreCursorPosition();
+}
+
+void ClearScreen_SystemAPIDispatcher()
+{
+  ClearScreen = nullptr;
+  Dispatch();
+  RF_ASSERT(
+      ClearScreen != ClearScreen_SystemAPIDispatcher && ClearScreen != nullptr,
+      "Funtion was called and couldn't be dispatched");
+  return ClearScreen();
+}
+
+void MoveCursorTo_SystemAPIDispatcher(RF_Type::UInt16 Line,
+                                      RF_Type::UInt16 Column)
+{
+  MoveCursorTo = nullptr;
+  Dispatch();
+  RF_ASSERT(MoveCursorTo != MoveCursorTo_SystemAPIDispatcher &&
+                MoveCursorTo != nullptr,
+            "Funtion was called and couldn't be dispatched");
+  return MoveCursorTo(Line, Column);
+}
+
+void MoveCursorUp_SystemAPIDispatcher(RF_Type::UInt16 ByValue)
+{
+  MoveCursorUp = nullptr;
+  Dispatch();
+  RF_ASSERT(MoveCursorUp != MoveCursorUp_SystemAPIDispatcher &&
+                MoveCursorUp != nullptr,
+            "Funtion was called and couldn't be dispatched");
+  return MoveCursorUp(ByValue);
+}
+
+void MoveCursorDown_SystemAPIDispatcher(RF_Type::UInt16 ByValue)
+{
+  MoveCursorDown = nullptr;
+  Dispatch();
+  RF_ASSERT(MoveCursorDown != MoveCursorDown_SystemAPIDispatcher &&
+                MoveCursorDown != nullptr,
+            "Funtion was called and couldn't be dispatched");
+  return MoveCursorDown(ByValue);
+}
+
+void MoveCursorLeft_SystemAPIDispatcher(RF_Type::UInt16 ByValue)
+{
+  MoveCursorLeft = nullptr;
+  Dispatch();
+  RF_ASSERT(MoveCursorLeft != MoveCursorLeft_SystemAPIDispatcher &&
+                MoveCursorLeft != nullptr,
+            "Funtion was called and couldn't be dispatched");
+  return MoveCursorLeft(ByValue);
+}
+
+void MoveCursorRight_SystemAPIDispatcher(RF_Type::UInt16 ByValue)
+{
+  MoveCursorRight = nullptr;
+  Dispatch();
+  RF_ASSERT(MoveCursorRight != MoveCursorRight_SystemAPIDispatcher &&
+                MoveCursorRight != nullptr,
+            "Funtion was called and couldn't be dispatched");
+  return MoveCursorRight(ByValue);
+}
+
+void HideCursor_SystemAPIDispatcher()
+{
+  HideCursor = nullptr;
+  Dispatch();
+  RF_ASSERT(
+      HideCursor != HideCursor_SystemAPIDispatcher && HideCursor != nullptr,
+      "Funtion was called and couldn't be dispatched");
+  return HideCursor();
+}
+
+void ShowCursor_SystemAPIDispatcher()
+{
+  ShowCursor = nullptr;
+  Dispatch();
+  RF_ASSERT(
+      ShowCursor != ShowCursor_SystemAPIDispatcher && ShowCursor != nullptr,
+      "Funtion was called and couldn't be dispatched");
+  return ShowCursor();
+}
+
 ClearCallback Clear = Clear_SystemAPIDispatcher;
 ReadLineCallback ReadLine = ReadLine_SystemAPIDispatcher;
 ReadSecretLineCallback ReadSecretLine = ReadSecretLine_SystemAPIDispatcher;
@@ -153,6 +266,20 @@ ResetModifierCallback ResetModifier = ResetModifier_SystemAPIDispatcher;
 GetColorLevelSupportCallback GetColorLevelSupport =
     GetColorLevelSupport_SystemAPIDispatcher;
 GetScreenSizeCallback GetScreenSize = GetScreenSize_SystemAPIDispatcher;
+GetCursorPositionCallback GetCursorPosition =
+    GetCursorPosition_SystemAPIDispatcher;
+SaveCursorPositionCallback SaveCursorPosition =
+    SaveCursorPosition_SystemAPIDispatcher;
+RestoreCursorPositionCallback RestoreCursorPosition =
+    RestoreCursorPosition_SystemAPIDispatcher;
+ClearScreenCallback ClearScreen = ClearScreen_SystemAPIDispatcher;
+MoveCursorToCallback MoveCursorTo = MoveCursorTo_SystemAPIDispatcher;
+MoveCursorUpCallback MoveCursorUp = MoveCursorUp_SystemAPIDispatcher;
+MoveCursorDownCallback MoveCursorDown = MoveCursorDown_SystemAPIDispatcher;
+MoveCursorLeftCallback MoveCursorLeft = MoveCursorLeft_SystemAPIDispatcher;
+MoveCursorRightCallback MoveCursorRight = MoveCursorRight_SystemAPIDispatcher;
+HideCursorCallback HideCursor = HideCursor_SystemAPIDispatcher;
+ShowCursorCallback ShowCursor = ShowCursor_SystemAPIDispatcher;
 
 RF_Type::Bool IsSuccessfullyDispatched()
 {
@@ -186,6 +313,31 @@ RF_Type::Bool IsSuccessfullyDispatched()
            GetColorLevelSupport != nullptr;
   result = result && GetScreenSize != GetScreenSize_SystemAPIDispatcher &&
            GetScreenSize != nullptr;
+  result = result &&
+           GetCursorPosition != GetCursorPosition_SystemAPIDispatcher &&
+           GetCursorPosition != nullptr;
+  result = result &&
+           SaveCursorPosition != SaveCursorPosition_SystemAPIDispatcher &&
+           SaveCursorPosition != nullptr;
+  result = result &&
+           RestoreCursorPosition != RestoreCursorPosition_SystemAPIDispatcher &&
+           RestoreCursorPosition != nullptr;
+  result = result && ClearScreen != ClearScreen_SystemAPIDispatcher &&
+           ClearScreen != nullptr;
+  result = result && MoveCursorTo != MoveCursorTo_SystemAPIDispatcher &&
+           MoveCursorTo != nullptr;
+  result = result && MoveCursorUp != MoveCursorUp_SystemAPIDispatcher &&
+           MoveCursorUp != nullptr;
+  result = result && MoveCursorDown != MoveCursorDown_SystemAPIDispatcher &&
+           MoveCursorDown != nullptr;
+  result = result && MoveCursorLeft != MoveCursorLeft_SystemAPIDispatcher &&
+           MoveCursorLeft != nullptr;
+  result = result && MoveCursorRight != MoveCursorRight_SystemAPIDispatcher &&
+           MoveCursorRight != nullptr;
+  result = result && HideCursor != HideCursor_SystemAPIDispatcher &&
+           HideCursor != nullptr;
+  result = result && ShowCursor != ShowCursor_SystemAPIDispatcher &&
+           ShowCursor != nullptr;
   return result;
 }
 
@@ -225,6 +377,36 @@ void GetNotDispatchedFunctions(RF_Collect::List<RF_Type::String>& Result)
   if(GetScreenSize == GetScreenSize_SystemAPIDispatcher ||
      GetScreenSize == nullptr)
     Result.AddLast("GetScreenSize"_rfs);
+  if(GetCursorPosition == GetCursorPosition_SystemAPIDispatcher ||
+     GetCursorPosition == nullptr)
+    Result.AddLast("GetCursorPosition"_rfs);
+  if(SaveCursorPosition == SaveCursorPosition_SystemAPIDispatcher ||
+     SaveCursorPosition == nullptr)
+    Result.AddLast("SaveCursorPosition"_rfs);
+  if(RestoreCursorPosition == RestoreCursorPosition_SystemAPIDispatcher ||
+     RestoreCursorPosition == nullptr)
+    Result.AddLast("RestoreCursorPosition"_rfs);
+  if(ClearScreen == ClearScreen_SystemAPIDispatcher || ClearScreen == nullptr)
+    Result.AddLast("ClearScreen"_rfs);
+  if(MoveCursorTo == MoveCursorTo_SystemAPIDispatcher ||
+     MoveCursorTo == nullptr)
+    Result.AddLast("MoveCursorTo"_rfs);
+  if(MoveCursorUp == MoveCursorUp_SystemAPIDispatcher ||
+     MoveCursorUp == nullptr)
+    Result.AddLast("MoveCursorUp"_rfs);
+  if(MoveCursorDown == MoveCursorDown_SystemAPIDispatcher ||
+     MoveCursorDown == nullptr)
+    Result.AddLast("MoveCursorDown"_rfs);
+  if(MoveCursorLeft == MoveCursorLeft_SystemAPIDispatcher ||
+     MoveCursorLeft == nullptr)
+    Result.AddLast("MoveCursorLeft"_rfs);
+  if(MoveCursorRight == MoveCursorRight_SystemAPIDispatcher ||
+     MoveCursorRight == nullptr)
+    Result.AddLast("MoveCursorRight"_rfs);
+  if(HideCursor == HideCursor_SystemAPIDispatcher || HideCursor == nullptr)
+    Result.AddLast("HideCursor"_rfs);
+  if(ShowCursor == ShowCursor_SystemAPIDispatcher || ShowCursor == nullptr)
+    Result.AddLast("ShowCursor"_rfs);
 }
 
 }  // namespace RadonFramework::System::IO::Console

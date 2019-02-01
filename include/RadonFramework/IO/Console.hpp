@@ -23,6 +23,7 @@ public:
                                  RF_Type::String (*)(const RF_Type::String&));
   RF_Type::String Prompt();
   RF_Collect::Pair<RF_Type::UInt16, RF_Type::UInt16> GetScreenSize() const;
+  void SetCursorVisible(RF_Type::Bool Visible= false);
 };
 
 }  // namespace RadonFramework::IO

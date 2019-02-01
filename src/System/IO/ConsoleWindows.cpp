@@ -84,121 +84,6 @@ void WriteLine_Windows(const RF_Type::String& Value)
   WriteConsoleA(oh, (Value + "\n").c_str(), Value.Length(), &written, nullptr);
 }
 
-void SetForgroundColor_Windows(RF_Type::UInt8 R,
-                               RF_Type::UInt8 G,
-                               RF_Type::UInt8 B)
-{
-  DWORD written;
-  HANDLE oh = GetStdHandle(STD_OUTPUT_HANDLE);
-  auto escape = RF_Type::String::Format("\x1b[38;2;%u;%u;%um"_rfs, R, G, B);
-  WriteConsoleA(oh, escape.c_str(), escape.Length(), &written, nullptr);
-}
-
-void SetBackgroundColor_Windows(RF_Type::UInt8 R,
-                                RF_Type::UInt8 G,
-                                RF_Type::UInt8 B)
-{
-  DWORD written;
-  HANDLE oh = GetStdHandle(STD_OUTPUT_HANDLE);
-  auto escape = RF_Type::String::Format("\x1b[48;2;%u;%u;%um"_rfs, R, G, B);
-  WriteConsoleA(oh, escape.c_str(), escape.Length(), &written, nullptr);
-}
-
-void SetModifier_Windows(RF_SysConsole::Modifiers Modifiers)
-{
-  DWORD written;
-  HANDLE oh = GetStdHandle(STD_OUTPUT_HANDLE);
-  RF_Type::String escape;
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Reset)
-  {
-    escape = RF_Type::String::Format("\x1b[0m"_rfs);
-  }
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Bold)
-  {
-    escape = RF_Type::String::Format("\x1b[1m"_rfs);
-  }
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Dim)
-  {
-    escape = RF_Type::String::Format("\x1b[2m"_rfs);
-  }
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Italic)
-  {
-    escape = RF_Type::String::Format("\x1b[3m"_rfs);
-  }
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Underline)
-  {
-    escape = RF_Type::String::Format("\x1b[4m"_rfs);
-  }
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Inverse)
-  {
-    escape = RF_Type::String::Format("\x1b[7m"_rfs);
-  }
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Hidden)
-  {
-    escape = RF_Type::String::Format("\x1b[8m"_rfs);
-  }
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Strikethrough)
-  {
-    escape = RF_Type::String::Format("\x1b[9m"_rfs);
-  }
-  WriteConsoleA(oh, escape.c_str(), escape.Length(), &written, nullptr);
-}
-
-void ResetForgroundColor_Windows()
-{
-  DWORD written;
-  HANDLE oh = GetStdHandle(STD_OUTPUT_HANDLE);
-  RF_Type::String escape;
-  escape = RF_Type::String::Format("\x1b[39m"_rfs);
-  WriteConsoleA(oh, escape.c_str(), escape.Length(), &written, nullptr);
-}
-
-void ResetBackgroundColor_Windows()
-{
-  DWORD written;
-  HANDLE oh = GetStdHandle(STD_OUTPUT_HANDLE);
-  RF_Type::String escape;
-  escape = RF_Type::String::Format("\x1b[49m"_rfs);
-  WriteConsoleA(oh, escape.c_str(), escape.Length(), &written, nullptr);
-}
-
-void ResetModifier_Windows(RF_SysConsole::Modifiers Modifiers)
-{
-  DWORD written;
-  HANDLE oh = GetStdHandle(STD_OUTPUT_HANDLE);
-  RF_Type::String escape;
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Reset)
-  {
-    escape = RF_Type::String::Format("\x1b[0m"_rfs);
-  }
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Bold ||
-     Modifiers == RadonFramework::System::IO::Console::Modifiers::Dim)
-  {
-    escape = RF_Type::String::Format("\x1b[22m"_rfs);
-  }
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Italic)
-  {
-    escape = RF_Type::String::Format("\x1b[23m"_rfs);
-  }
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Underline)
-  {
-    escape = RF_Type::String::Format("\x1b[24m"_rfs);
-  }
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Inverse)
-  {
-    escape = RF_Type::String::Format("\x1b[27m"_rfs);
-  }
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Hidden)
-  {
-    escape = RF_Type::String::Format("\x1b[28m"_rfs);
-  }
-  if(Modifiers == RadonFramework::System::IO::Console::Modifiers::Strikethrough)
-  {
-    escape = RF_Type::String::Format("\x1b[29m"_rfs);
-  }
-  WriteConsoleA(oh, escape.c_str(), escape.Length(), &written, nullptr);
-}
-
 RF_SysConsole::ColorLevel GetColorLevelSupport_Windows()
 {
   auto result = RF_SysConsole::ColorLevel::HasBasic;
@@ -219,14 +104,47 @@ RF_SysConsole::ColorLevel GetColorLevelSupport_Windows()
 RF_Collect::Pair<RF_Type::UInt16, RF_Type::UInt16> GetScreenSize_Windows()
 {
   RF_Collect::Pair<RF_Type::UInt16, RF_Type::UInt16> result;
-  CONSOLE_SCREEN_BUFFER_INFO csbi; 
+  CONSOLE_SCREEN_BUFFER_INFO csbi;
   HANDLE oh = GetStdHandle(STD_OUTPUT_HANDLE);
-  if (GetConsoleScreenBufferInfo(oh, &csbi))
+  if(GetConsoleScreenBufferInfo(oh, &csbi))
   {
-    result.First = csbi.srWindow.Right-csbi.srWindow.Left+1;
-    result.Second = csbi.srWindow.Bottom-csbi.srWindow.Top+1;
+    result.First = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+    result.Second = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
   }
   return result;
+}
+
+RF_Collect::Pair<RF_Type::UInt16, RF_Type::UInt16> GetCursorPosition_Windows()
+{
+  RF_Collect::Pair<RF_Type::UInt16, RF_Type::UInt16> result;
+  CONSOLE_SCREEN_BUFFER_INFO csbi;
+  HANDLE oh = GetStdHandle(STD_OUTPUT_HANDLE);
+  if(GetConsoleScreenBufferInfo(oh, &csbi))
+  {
+    result.First = csbi.dwCursorPosition.X;
+    result.Second = csbi.dwCursorPosition.Y;
+  }
+  return result;
+}
+
+void ShowConsoleCursor(bool showFlag)
+{
+  HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+
+  CONSOLE_CURSOR_INFO cursorInfo;
+
+  GetConsoleCursorInfo(out, &cursorInfo);
+  cursorInfo.bVisible = showFlag;  // set the cursor visibility
+  SetConsoleCursorInfo(out, &cursorInfo);
+}
+
+void HideCursor_Windows() {
+  ShowConsoleCursor(false);
+}
+
+void ShowCursor_Windows()
+{
+  ShowConsoleCursor(true);
 }
 
 namespace RadonFramework::System::IO::Console
@@ -246,7 +164,7 @@ void Init()
   }
 }
 
-void Dispatch()
+void Dispatch_Windows()
 {
   Init();
   Clear = ::Clear_Windows;
@@ -254,14 +172,11 @@ void Dispatch()
   ReadSecretLine = ::ReadSecretLine_Windows;
   WriteLine = ::WriteLine_Windows;
   Write = ::Write_Windows;
-  SetForgroundColor = ::SetForgroundColor_Windows;
-  SetBackgroundColor = ::SetBackgroundColor_Windows;
-  SetModifier = ::SetModifier_Windows;
-  ResetForgroundColor = ::ResetForgroundColor_Windows;
-  ResetBackgroundColor = ::ResetBackgroundColor_Windows;
-  ResetModifier = ::ResetModifier_Windows;
   GetColorLevelSupport = ::GetColorLevelSupport_Windows;
   GetScreenSize = ::GetScreenSize_Windows;
+  GetCursorPosition = ::GetCursorPosition_Windows;
+  HideCursor = ::HideCursor_Windows;
+  ShowCursor = ::ShowCursor_Windows;
 }
 
 }  // namespace RadonFramework::System::IO::Console

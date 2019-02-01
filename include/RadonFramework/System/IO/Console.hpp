@@ -47,6 +47,40 @@ using GetScreenSizeCallback =
     RF_Collect::Pair<RF_Type::UInt16, RF_Type::UInt16> (*)();
 extern GetScreenSizeCallback GetScreenSize;
 
+using GetCursorPositionCallback =
+    RF_Collect::Pair<RF_Type::UInt16, RF_Type::UInt16> (*)();
+extern GetCursorPositionCallback GetCursorPosition;
+
+using SaveCursorPositionCallback = void (*)();
+extern SaveCursorPositionCallback SaveCursorPosition;
+
+using RestoreCursorPositionCallback = void (*)();
+extern RestoreCursorPositionCallback RestoreCursorPosition;
+
+using ClearScreenCallback = void (*)();
+extern ClearScreenCallback ClearScreen;
+
+using MoveCursorToCallback = void (*)(RF_Type::UInt16, RF_Type::UInt16);
+extern MoveCursorToCallback MoveCursorTo;
+
+using MoveCursorUpCallback = void(*)(RF_Type::UInt16);
+extern MoveCursorUpCallback MoveCursorUp;
+
+using MoveCursorDownCallback = void (*)(RF_Type::UInt16);
+extern MoveCursorDownCallback MoveCursorDown;
+
+using MoveCursorLeftCallback = void (*)(RF_Type::UInt16);
+extern MoveCursorLeftCallback MoveCursorLeft;
+
+using MoveCursorRightCallback = void (*)(RF_Type::UInt16);
+extern MoveCursorRightCallback MoveCursorRight;
+
+using HideCursorCallback = void (*)();
+extern HideCursorCallback HideCursor;
+
+using ShowCursorCallback = void (*)();
+extern ShowCursorCallback ShowCursor;
+
 enum class Modifiers
 {
   Reset,

@@ -52,4 +52,16 @@ Console::GetScreenSize() const
   return RF_SysConsole::GetScreenSize();
 }
 
+void Console::SetCursorVisible(RF_Type::Bool Visible)
+{
+  if(!Visible)
+  {
+    RF_SysConsole::HideCursor();
+  }
+  else
+  {
+    RF_SysConsole::ShowCursor();
+  }
+}
+
 }  // namespace RadonFramework::IO

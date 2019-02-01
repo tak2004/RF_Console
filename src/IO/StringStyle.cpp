@@ -2,8 +2,8 @@
 #include "RadonFramework/System/IO/Console.hpp"
 #include "RadonFramework/Drawing/Color/Converter.hpp"
 
-namespace RadonFramework::IO{
-
+namespace RadonFramework::IO
+{
 class StringStyle::StyleCommand
 {
 public:
@@ -22,10 +22,25 @@ public:
   }
 };
 
-StringStyle::StringStyle():m_Commands(nullptr) {}
+StringStyle::StringStyle() : m_Commands(nullptr) {}
 
-StringStyle& StringStyle::RGB(RF_Color::RGB Color,
-                              RF_Type::Bool Forground)
+StringStyle::StringStyle(StringStyle&& Move)
+{
+  m_Commands = Move.m_Commands;
+  Move.m_Commands = nullptr;
+}
+
+StringStyle::~StringStyle()
+{
+  while(m_Commands)
+  {
+    auto* tmp = m_Commands;
+    m_Commands = m_Commands->Next;
+    delete tmp;
+  }
+}
+
+StringStyle& StringStyle::RGB(RF_Color::RGB Color, RF_Type::Bool Forground)
 {
   auto* cmd = new StyleCommand();
   cmd->R = Color.R;
@@ -53,8 +68,7 @@ StringStyle& StringStyle::Hex(RF_Type::UInt32 RGB, RF_Type::Bool Forground)
   return *this;
 }
 
-StringStyle& StringStyle::HSL(RF_Color::HSL Color,
-                              RF_Type::Bool Forground)
+StringStyle& StringStyle::HSL(RF_Color::HSL Color, RF_Type::Bool Forground)
 {
   auto* cmd = new StyleCommand();
   auto rgb = RF_Color::HSLConverter::ToColor(Color);
@@ -78,8 +92,7 @@ StringStyle& StringStyle::HSL(RF_Color::HSL Color,
   return *this;
 }
 
-StringStyle& StringStyle::HSV(RF_Color::HSV Color,
-                              RF_Type::Bool Forground)
+StringStyle& StringStyle::HSV(RF_Color::HSV Color, RF_Type::Bool Forground)
 {
   auto* cmd = new StyleCommand();
   auto rgb = RF_Color::HSVConverter::ToColor(Color);
@@ -103,8 +116,7 @@ StringStyle& StringStyle::HSV(RF_Color::HSV Color,
   return *this;
 }
 
-StringStyle& StringStyle::HWB(RF_Color::HWB Color,
-                              RF_Type::Bool Forground)
+StringStyle& StringStyle::HWB(RF_Color::HWB Color, RF_Type::Bool Forground)
 {
   auto* cmd = new StyleCommand();
   auto rgb = RF_Color::HWBConverter::ToColor(Color);
@@ -335,7 +347,7 @@ StringStyle&
 StringStyle::Black(const RF_Type::String& Text, RF_Type::Bool Forground)
 {
   auto* cmd = new StyleCommand();
-  if (Forground)
+  if(Forground)
   {
     cmd->Command = [](const StyleCommand& Cmd) {
       RF_SysConsole::SetForgroundColor(0, 0, 0);
@@ -350,7 +362,7 @@ StringStyle::Black(const RF_Type::String& Text, RF_Type::Bool Forground)
       RF_SysConsole::Write(Cmd.Text);
       RF_SysConsole::ResetBackgroundColor();
     };
-  }  
+  }
   cmd->Text = Text;
   cmd->Next = m_Commands;
   m_Commands = cmd;
@@ -702,26 +714,29 @@ StringStyle& StringStyle::Gray(RF_Type::Bool Forground)
 StringStyle&
 StringStyle::Gray(const RF_Type::String& Text, RF_Type::Bool Forground)
 {
-  auto* cmd = new StyleCommand();
-  if(Forground)
+  if(Text.Size() > 0)
   {
-    cmd->Command = [](const StyleCommand& Cmd) {
-      RF_SysConsole::SetForgroundColor(127, 127, 127);
-      RF_SysConsole::Write(Cmd.Text);
-      RF_SysConsole::ResetForgroundColor();
-    };
+    auto* cmd = new StyleCommand();
+    if(Forground)
+    {
+      cmd->Command = [](const StyleCommand& Cmd) {
+        RF_SysConsole::SetForgroundColor(127, 127, 127);
+        RF_SysConsole::Write(Cmd.Text);
+        RF_SysConsole::ResetForgroundColor();
+      };
+    }
+    else
+    {
+      cmd->Command = [](const StyleCommand& Cmd) {
+        RF_SysConsole::SetBackgroundColor(127, 127, 127);
+        RF_SysConsole::Write(Cmd.Text);
+        RF_SysConsole::ResetBackgroundColor();
+      };
+    }
+    cmd->Text = Text;
+    cmd->Next = m_Commands;
+    m_Commands = cmd;
   }
-  else
-  {
-    cmd->Command = [](const StyleCommand& Cmd) {
-      RF_SysConsole::SetBackgroundColor(127, 127, 127);
-      RF_SysConsole::Write(Cmd.Text);
-      RF_SysConsole::ResetBackgroundColor();
-    };
-  }
-  cmd->Text = Text;
-  cmd->Next = m_Commands;
-  m_Commands = cmd;
   return *this;
 }
 
@@ -762,10 +777,10 @@ StringStyle& StringStyle::Gradient(const RF_Color::Gradient& Gradient,
                                    const RF_Type::String& Text,
                                    RF_Type::Bool Forground)
 {
-  for (auto i= 0; i< Text.Length(); ++i)
+  for(auto i = 0; i < Text.Length(); ++i)
   {
     auto* cmd = new StyleCommand();
-    auto rgb = Gradient.ComputeAt(i/RF_Type::Float32(Text.Length()));
+    auto rgb = Gradient.ComputeAt(i / RF_Type::Float32(Text.Length()));
     cmd->R = rgb.R;
     cmd->G = rgb.G;
     cmd->B = rgb.B;
@@ -786,7 +801,7 @@ StringStyle& StringStyle::Gradient(const RF_Color::Gradient& Gradient,
         RF_SysConsole::ResetBackgroundColor();
       };
     }
-    cmd->Text = Text.SubString(i,1);
+    cmd->Text = Text.SubString(i, 1);
     cmd->Next = m_Commands;
     m_Commands = cmd;
   }
@@ -798,6 +813,82 @@ void StringStyle::ToString() const
   (*m_Commands)();
 }
 
-
-
+StringStyle& StringStyle::SaveCursorPosition()
+{
+  auto* cmd = new StyleCommand();
+  cmd->Command = [](const StyleCommand& Cmd) {
+    RF_SysConsole::Write(Cmd.Text);
+  };
+  cmd->Next = m_Commands;
+  cmd->Text = "\033[s"_rfs;
+  m_Commands = cmd;
+  return *this;
 }
+
+StringStyle& StringStyle::RestoreCursorPosition()
+{
+  auto* cmd = new StyleCommand();
+  cmd->Command = [](const StyleCommand& Cmd) {
+    RF_SysConsole::Write(Cmd.Text);
+  };
+  cmd->Next = m_Commands;
+  cmd->Text = "\033[u"_rfs;
+  m_Commands = cmd;
+  return *this;
+}
+
+StringStyle& StringStyle::MoveCursorUp(RF_Type::UInt16 ByValue)
+{
+  if(ByValue > 0)
+  {
+    auto* cmd = new StyleCommand();
+    cmd->Command = [](const StyleCommand& Cmd) {
+      RF_SysConsole::Write(Cmd.Text);
+    };
+    cmd->Next = m_Commands;
+    cmd->Text = RF_Type::String::Format("\033[%dA"_rfs, ByValue);
+    m_Commands = cmd;
+  }
+  return *this;
+}
+
+StringStyle& StringStyle::MoveCursorDown(RF_Type::UInt16 ByValue)
+{
+  if(ByValue > 0)
+  {
+    auto* cmd = new StyleCommand();
+    cmd->Command = [](const StyleCommand& Cmd) {
+      RF_SysConsole::Write(Cmd.Text);
+    };
+    cmd->Next = m_Commands;
+    cmd->Text = RF_Type::String::Format("\033[%dB"_rfs, ByValue);
+    m_Commands = cmd;
+  }
+  return *this;
+}
+
+StringStyle& StringStyle::LineBreak(RF_Type::UInt16 LineWidth)
+{
+  auto* cmd = new StyleCommand();
+  cmd->Command = [](const StyleCommand& Cmd) {
+    RF_SysConsole::Write(Cmd.Text);
+  };
+  cmd->Next = m_Commands;
+  cmd->Text = RF_Type::String::Format("\033[1B\033[%dD"_rfs, LineWidth);
+  m_Commands = cmd;
+  return *this;
+}
+
+StringStyle& StringStyle::MoveCursorRight(RF_Type::UInt16 ByValue)
+{
+  auto* cmd = new StyleCommand();
+  cmd->Command = [](const StyleCommand& Cmd) {
+    RF_SysConsole::Write(Cmd.Text);
+  };
+  cmd->Next = m_Commands;
+  cmd->Text = RF_Type::String::Format("\033[%dC"_rfs, ByValue);
+  m_Commands = cmd;
+  return *this;
+}
+
+}  // namespace RadonFramework::IO
