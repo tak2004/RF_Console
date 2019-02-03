@@ -8,9 +8,9 @@ This package provides console input and output access, formatting, colored text,
 - [x] Appender class to print Radon Framework logging to console.
 - [ ] Box rendering with Designated Character Set(DCS).
 - [ ] Table rendering with DCS.
-- [ ] UI layouting with domain specific language(DSL).
+- [x] UI layouting with domain specific language(DSL).
 - [ ] Screen buffer control(scroll, resize, obtain size).
-- [ ] Cursor support(move, visibility).
+- [x] Cursor support(move, visibility).
 - [ ] Console information(window size, DCS support, escape sequence support, active codepage).
 - [ ] Console control(set window size, enable DCS, enable escape sequence, set codepage, disable word wrap).
 - [ ] Multiline gradient text rendering.
@@ -40,3 +40,5 @@ https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequen
 https://www.npmjs.com/package/cliui and React
 
 https://www.npmjs.com/package/ansi-escapes
+
+- [ ] Don't generate commands if the string is empty.
