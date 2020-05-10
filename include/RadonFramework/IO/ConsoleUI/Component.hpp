@@ -1,5 +1,6 @@
 #pragma once
 
+#include <RadonFramework/IO/ConsoleUI/ComponentOperator.hpp>
 #include <RadonFramework/IO/ConsoleUI/State.hpp>
 #include <RadonFramework/IO/ConsoleUI/Property.hpp>
 #include <RadonFramework/IO/StringStyle.hpp>

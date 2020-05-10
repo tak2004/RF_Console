@@ -11,6 +11,7 @@ struct P : public Component
   template <typename... ARGS>
   P(ARGS&&... Args)
   {
+    Color = {255,255,255};
     RegisterState("text", Text);
     RegisterState("color", Color);
     Add(Args...);
