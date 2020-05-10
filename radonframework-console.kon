@@ -1,0 +1,30 @@
+description=Radon Framework Console
+version=1.0.0
+author=Thomas Kunze
+package{
+  ignore[
+    dist
+    .gitignore
+  ]
+}
+build{
+  generator{
+    cmake{
+      source=$(radonframework-console.path)
+      builddir=$(radonframework-console.path)\build
+      creates=$(radonframework-console.path)\dist\RadonFrameworkConsole.lib
+      parameters=-DRF_CONSOLE_COMPILER_STATIC_LINKED_CRT=ON
+    }
+  }
+  export{
+    includes[
+      $(radonframework-console.path)\include
+    ]
+    librarypaths[
+      $(radonframework-console.path)\dist
+    ]
+    libs[
+      RadonFrameworkConsole.lib
+    ]
+  }
+}
